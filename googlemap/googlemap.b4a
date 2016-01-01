@@ -1,0 +1,57 @@
+﻿Version=2.52
+IconFile=
+NumberOfModules=0
+Package=b4a.example
+DoNotOverwriteManifest=False
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+UserTypesHint=
+NumberOfFiles=0
+NumberOfLibraries=2
+Library1=core
+Library2=googlemaps
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: Google Map - Lyndon Bermoy
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+
+End Sub
+
+Sub Globals
+   Dim mp As Panel
+   Dim mf As MapFragment
+   Dim gm As GoogleMap  
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+   mp.Initialize("")
+   Activity.AddView(mp, 0, 0, 100%x, 100%y)
+   If mf.IsGooglePlayServicesAvailable = False Then
+      ToastMessageShow("Google Play services not available.", True)
+   Else
+      mf.Initialize("Map", mp)
+   End If
+End Sub
+Sub Map_Ready
+   Log("map ready")
+   gm = mf.GetMap
+   If gm.IsInitialized = False Then
+      ToastMessageShow("Error initializing the map.", True)
+   Else
+      gm.AddMarker(36, 15, "This is the google map!")
+      Dim cp As CameraPosition
+      cp.Initialize(36, 15, gm.CameraPosition.Zoom)
+      gm.AnimateCamera(cp)
+   End If
+End Sub
